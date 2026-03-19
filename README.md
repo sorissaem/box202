@@ -3,7 +3,7 @@
 학급 운영을 위한 웹앱 기반 건의함입니다.
 
 ### 🔗 바로가기
-[👉 우리 반 건의함 접속하기 (클릭)](여기에_복사한_배포_URL_붙여넣기)
+[👉 우리 반 건의함 접속하기 (클릭)](https://script.google.com/macros/s/AKfycbyJQ1fOgqY4u7w5gwMO3t88B1K7H4ouLNV1ND4wFvpQ555cTWj1ScbwwZA6hGHCd65Z9w/exec)
 
 ### 🛠 주요 기능
 - **로그인 불필요**: 암호 입력만으로 간편 접속
