@@ -1,11 +1,77 @@
-<script>
-  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzTBjL9zIt80Bvakmr-J3yuIhXaUyBiu0oIYM0aCzpFJE9zAVXRpDr-aUSyZhpAy7iNgQ/exec";
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>우리 반 비밀 건의함</title>
+  <style>
+    :root { --primary-color: #4a90e2; --bg-color: #f8f9fa; --card-bg: #ffffff; --text-main: #333; }
+    body { font-family: 'Pretendard', sans-serif; background-color: var(--bg-color); color: var(--text-main); margin: 0; padding: 20px; display: flex; justify-content: center; }
+    .container { width: 100%; max-width: 500px; }
+    .dashboard-header { background: var(--primary-color); color: white; padding: 20px; border-radius: 15px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    .dashboard-header h1 { margin: 0; font-size: 1.2rem; }
+    .dashboard-header p { margin: 5px 0 0; font-size: 0.9rem; opacity: 0.9; }
+    .card { background: var(--card-bg); padding: 20px; border-radius: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+    .input-group { margin-bottom: 15px; }
+    label { display: block; font-size: 0.85rem; font-weight: bold; margin-bottom: 5px; color: #666; }
+    input, select, textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 1rem; }
+    textarea { height: 100px; resize: none; }
+    button { width: 100%; padding: 15px; background: var(--primary-color); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+    button:hover { background: #357abd; }
+    button:disabled { background: #ccc; }
+    #suggestionForm { display: none; }
+    .loading { display: none; text-align: center; margin-top: 10px; font-size: 0.8rem; color: #888; }
+  </style>
+</head>
+<body>
 
+<div class="container">
+  <div class="dashboard-header">
+    <h1>우리 반 소통 보드 💬</h1>
+    <p>불편한 점이나 서로 챙겨줄 아이디어를 적어주세요.</p>
+  </div>
+
+  <div id="passwordArea" class="card">
+    <div class="input-group">
+      <label>우리 반 암호 입력</label>
+      <input type="password" id="classPw" placeholder="암호를 입력하세요">
+    </div>
+    <button onclick="checkPassword()">확인하기</button>
+  </div>
+
+  <div id="suggestionForm" class="card">
+    <div class="input-group">
+      <label>이름 (작성자)</label>
+      <input type="text" id="userName" placeholder="이름을 적어주세요">
+    </div>
+    <div class="input-group">
+      <label>건의 유형</label>
+      <select id="category">
+        <option value="불편해요">학교생활 불편함</option>
+        <option value="챙겨줘요">서로 챙기면 좋을 점</option>
+        <option value="아이디어">기발한 아이디어</option>
+        <option value="기타">기타</option>
+      </select>
+    </div>
+    <div class="input-group">
+      <label>내용</label>
+      <textarea id="content" placeholder="선생님께 하고 싶은 말을 자유롭게 써주세요."></textarea>
+    </div>
+    <button id="submitBtn" onclick="submitData()">의견 보내기</button>
+    <div id="loading" class="loading">보내는 중... 잠시만 기다려주세요.</div>
+  </div>
+</div>
+
+<script>
+  // ★ 주의: 아래 URL을 본인의 Google Apps Script 배포 URL로 꼭 바꾸세요!
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzTBjL9zIt80Bvakmr-J3yuIhXaUyBiu0oIYM0aCzpFJE9zAVXRpDr-aUSyZhpAy7iNgQ/exec";
   let userPw = "";
 
   function checkPassword() {
     const pw = document.getElementById('classPw').value;
-    if (pw === "우리반1234") { // 간단한 확인 (보안을 위해 실제로는 서버 통신 권장)
+    // 선생님이 Code.gs에 설정한 암호와 똑같이 맞춰주세요.
+    if (pw === "우리반1234") { 
       userPw = pw;
       document.getElementById('passwordArea').style.display = 'none';
       document.getElementById('suggestionForm').style.display = 'block';
@@ -30,23 +96,23 @@
     document.getElementById('loading').style.display = 'block';
 
     try {
-      // 깃허브에서 구글로 데이터를 보내는 핵심 코드
-      const response = await fetch(WEB_APP_URL, {
+      // 깃허브에서 구글로 데이터를 쏘는 부분
+      await fetch(WEB_APP_URL, {
         method: 'POST',
+        contentType: 'text/plain',
         body: JSON.stringify(data)
       });
-      const result = await response.json();
       
-      alert(result.message);
-      if(result.success) {
-        document.getElementById('userName').value = '';
-        document.getElementById('content').value = '';
-      }
+      alert("성공적으로 전달되었습니다!");
+      document.getElementById('userName').value = '';
+      document.getElementById('content').value = '';
     } catch (e) {
-      alert("전송 실패: 구글 배포 설정을 확인하세요.");
+      alert("전송 중 오류가 발생했습니다.");
     } finally {
       document.getElementById('submitBtn').disabled = false;
       document.getElementById('loading').style.display = 'none';
     }
   }
 </script>
+</body>
+</html>
